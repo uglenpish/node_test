@@ -3,10 +3,11 @@ const Tutorial = db.tutorials;
 const Op = db.Sequelize.Op;
 
 exports.create = (req, res) => {
+
   if (!req.body.title) {
     res.status(400).send({
-      message: "Контент не может быть пустым"
-    })
+      message: "Not create"
+    });
     return;
   }
 
@@ -23,6 +24,21 @@ exports.create = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message: err.message || "Произошла ошибка при создании учебника."
+      })
+    })
+}
+
+exports.findAll = (req, res) => {
+  const title = req.query.title;
+  let condition = title ? { title: { [Op.like]: `%${title}%`} } : null;
+
+  Tutorial.findAll( {where: condition} )
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: err.message || 'При получении учебных пособий произошла ошибка.'
       })
     })
 }

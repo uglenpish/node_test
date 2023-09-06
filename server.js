@@ -24,6 +24,9 @@ app.get("/", (req, res) => {
   res.json({message: "db.sequelize"});
 });
 
+// require("./routes/turorial.routes")(app);
+require("./routes/tutorial.routes")(app);
+
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
