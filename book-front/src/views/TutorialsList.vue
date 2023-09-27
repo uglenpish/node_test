@@ -40,7 +40,7 @@
           <label><strong>Status:</strong></label> {{ currentTutorial.published ? "Published" : "Pending" }}
         </div>
 
-        <router-link :to="'/tutorials/' + currentTutorial.id" class="badge badge-warning">Edit</router-link>
+        <router-link :to="'/tutorials/' + currentTutorial.id" class="badge badge-warning bg-secondary">Edit</router-link>
       </div>
       <div v-else>
         <br />
@@ -71,12 +71,37 @@
         TutorialDataService.getAll()
           .then(response => {
           	this.tutorials = response.data;
-          	console.log(response.data)
           })
           .catch(e => {
         	  console.log(e);
           });
-      }
+      },
+      setActiveTutorial(tutorial, index) {
+	      this.currentTutorial = tutorial;
+	      this.currentIndex = tutorial ? index : -1;
+      },
+			searchTitle() {
+      	TutorialDataService.findByTitle(this.title)
+          .then(response => {
+          	this.tutorials = response.data;
+          	this.setActiveTutorial(null);
+          })
+          .catch(e => {
+          	console.log(e)
+          })
+      },
+			removeAllTutorials() {
+      	TutorialDataService.deleteAll()
+          .then(response => {
+          	if(response.data === true) {
+		          this.retrieveTutorials();
+		          this.setActiveTutorial(null);
+            }
+          })
+          .catch(e => {
+            console.log(e)
+          })
+      },
     }
 	};
 </script>
